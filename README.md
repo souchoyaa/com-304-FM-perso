@@ -32,4 +32,4 @@ To get started, follow the instructions in the [4M_Tutorial](./4M_Tutorial/) fol
 
 ![4M](./4M_Tutorial/assets/4M_architecture.png)
 
-TBD: We will share details about this soon!
+We will share more details about this soon! For now, please see [COM_304_Spring_2025_nano4M_Project_Guidelines.pdf](/COM_304_Spring_2025_nano4M_Project_Guidelines.pdf) for `nano4M` project guidelines (last updated 18.02.2025).
