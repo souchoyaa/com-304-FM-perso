@@ -11,9 +11,9 @@ To ensure you grasp these concepts, we have designed exercises in the provided J
 
 ## Schedule
 
-- Week 1 to week 3: PyTorch tutorial, SCITAS setup, 4M tutorial
-- week 4 to week 9: Nano-4M project
-- Week 10 to week 14: Nano-4M extension
+- Week 1 to week 4: PyTorch tutorial, SCITAS setup, 4M tutorial
+- Week 5 to week 9: Nano-4M project
+- Week 10 to week 15: Nano-4M extension
 
 ## Notebooks
 ### 1. SCITAS
