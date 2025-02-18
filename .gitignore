@@ -1,0 +1,5 @@
+*.egg-info
+4M_Tutorial/retrieval_data
+*.tar.gz
+*.jpg
+*.pyc
