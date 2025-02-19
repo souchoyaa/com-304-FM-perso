@@ -112,7 +112,7 @@ In addition, we also have 14 GPUs that the students in COM-304 have high priorit
 ```
 
 ## Using Apptainer/Singularity to containerize your job
-Please refer to the [tutorial](../RL_Habitat_Homework/README.md) for the RL notebook homework.
+Coming soon.
 
 # House keeping
 
