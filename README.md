@@ -23,7 +23,7 @@ Follow the provided instructions at [SCITAS Tutorial](https://github.com/EPFL-VI
 [PyTorch](https://pytorch.org/) is an **open-source deep learning framework**, which provides a flexible and intuitive way to build deep learning models.
 In the [PyTorch_Tutorial](./PyTorch_Tutorial/) folder, you will find three tutorials covering the **basic usage of PyTorch** and the corresponding exercises. If you are already familiar with PyTorch, you can proceed directly to the exercises.
 
-### 3. Multimodal Foundation Model (4M) (Release Soon) [Worth 16% of your overall grade]
+### 3. Multimodal Foundation Model (4M) [Worth 16% of your overall grade]
 After gaining familiarity with PyTorch and SCITAS, you will explore the multimodal foundation model **[4M](https://4m.epfl.ch/)**. This hands-on experience will help you understand the model's key components and how to utilize its pipeline for generation and retrieval tasks.
 
 To get started, follow the instructions in the [4M_Tutorial](./4M_Tutorial/) folder to learn more about the model, set up the required environment, and experiment with the provided Jupyter notebooks!
