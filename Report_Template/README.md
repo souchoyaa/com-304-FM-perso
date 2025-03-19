@@ -8,7 +8,11 @@ For detailed instructions on what should be included in the project proposal see
 
 ### Progress Report
 
+To be communicated.
+
 ### Final Report
+
+To be communicated.
 
 ## LaTeX Report Writing
 
