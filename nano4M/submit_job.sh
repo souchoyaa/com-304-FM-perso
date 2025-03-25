@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=you_job_name         # Change as needed
+#SBATCH --job-name=you_job         # Change as needed
 #SBATCH --time=02:00:00
 #SBATCH --account=com-304
 #SBATCH --qos=com-304
@@ -15,4 +15,4 @@ WANDB=$2
 NUM_GPUS=$3
 
 conda activate nanofm
-export WANDB_API_KEY=$WANDB $$ OMP_NUM_THREADS=1 torchrun --nproc_per_node=$NUM_GPUS run_training.py --config $CONFIG_FILE
+export WANDB_API_KEY=$WANDB && OMP_NUM_THREADS=1 torchrun --nproc_per_node=$NUM_GPUS run_training.py --config $CONFIG_FILE
