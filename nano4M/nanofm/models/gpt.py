@@ -126,7 +126,7 @@ class GPT(nn.Module):
         # False = masked-out, True = not masked. Shape: [1, L, L]
         # Hint: What shape should the mask have such that each token can attend to itself and
         # all previous tokens, but not to any future tokens?
-        mask = torch.tril(torch.ones(L, L)).bool().unsqueeze()
+        mask = torch.tril(torch.ones(L, L)).bool().unsqueeze(0)
         mask = mask.to(self.device)
             
         # TODO: Forward pass through Transformer trunk
