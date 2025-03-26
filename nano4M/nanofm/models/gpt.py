@@ -126,6 +126,7 @@ class GPT(nn.Module):
         # Hint: What shape should the mask have such that each token can attend to itself and
         # all previous tokens, but not to any future tokens?
         mask = torch.tril(torch.ones(L, L)).unsqueeze(0).bool()
+        mask = mask.to(self.device())
             
         # TODO: Forward pass through Transformer trunk
         # Hint: Make sure to pass the causal mask to the transformer trunk too
@@ -214,10 +215,10 @@ class GPT(nn.Module):
             sampled_token,_ = sample_tokens(last_logits,temp,top_k,top_p)
 
             # Concatenate the new token to the current_tokens sequence
-            current_tokens = torch.stack(current_tokens, sampled_token.unsqueeze(0))
+            current_tokens = torch.cat([current_tokens, sampled_token.unsqueeze(0)], dim=1)
 
             # Break if the end-of-sequence token is generated
-            if eos_idx is not None and current_tokens.item() == eos_idx :
+            if eos_idx is not None and sampled_token.item() == eos_idx :
                 break
 
         if was_training:
