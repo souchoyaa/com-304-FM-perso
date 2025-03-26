@@ -105,6 +105,8 @@ class Attention(nn.Module):
         # Hint: Use the already defined self.scale
         attn = q @ k.transpose(-2,-1) * self.scale
 
+        F.sc
+
         if mask is not None:
             mask = rearrange(mask, "b n m -> b 1 n m") # Unsqueeze for multi-head attention
             # TODO: Apply the optional attention mask. Wherever the mask is False, replace the attention 
