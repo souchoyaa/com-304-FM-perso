@@ -170,7 +170,7 @@ class TransformerTrunk(nn.Module):
         super().__init__()
 
         self.blocks = nn.ModuleList() # TODO: Create a list of transformer blocks and wrap inside nn.ModuleList
-        for i in depth: 
+        for i in range(depth): 
             self.blocks.append(Block(dim,head_dim, mlp_ratio, use_bias))
     
     def forward(self, x: torch.Tensor, mask: Optional[torch.Tensor] = None) -> torch.Tensor:
