@@ -89,7 +89,7 @@ class Attention(nn.Module):
 
         # TODO: Define here the linear layer(s) producing K, Q, V from the input x
         # Hint: Do you need to define three different projections, or can you use a single one for all three?
-        self.qkv = nn.chunk(nn.Linear(dim, dim * 3, qkv_bias), dim = 1)
+        self.qkv = nn.Linear(dim, dim * 3, qkv_bias)
         self.softmax = nn.Softmax(dim = -1)
         self.attn_out_proj = nn.Linear(dim, dim, bias=proj_bias)
 
@@ -99,7 +99,7 @@ class Attention(nn.Module):
 
         # TODO: Compute the keys K, queries Q, and values V from x. Each should be of shape [B num_heads L head_dim].
         #give B L DIM => B self.num_head,L,_
-        q, k, v = self.qkv(x).reshape(B,self.num_heads,L,-1)
+        q, k, v = self.qkv(x).reshape(B,self.num_heads,L,-1).chunk(3, dim= -1)
 
         # TODO: Compute the attention matrix (pre softmax) and scale it by 1/sqrt(d_k). It should be of shape [B num_heads L L].
         # Hint: Use the already defined self.scale
