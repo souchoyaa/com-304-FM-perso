@@ -114,18 +114,19 @@ class GPT(nn.Module):
         B, L = x.size() # batch size and sequence length
 
         # TODO: Embed the input tokens using the input embedding layer. Shape: [B, L, D]
-        x = self.input_embedding(x)
+        inp_emb = self.input_embedding(x)
         
         # TODO: Add the positional embeddings to the tokens
         # Hint: Make sure this works for sequences of different lengths
-        pos_emb = self.positional_embedding[:L].unsqueeze(0)
-        x = x + pos_emb
+        # pos_emb = self.positional_embedding[:L].unsqueeze(0)
+        pos_emb = self.positional_embedding
+        x = inp_emb + pos_emb
 
         # TODO: Define the causal mask for the transformer trunk. 
         # False = masked-out, True = not masked. Shape: [1, L, L]
         # Hint: What shape should the mask have such that each token can attend to itself and
         # all previous tokens, but not to any future tokens?
-        mask = torch.tril(torch.ones(L, L)).unsqueeze(0).bool()
+        mask = torch.tril(torch.ones(L, L)).bool().unsqueeze()
         mask = mask.to(self.device)
             
         # TODO: Forward pass through Transformer trunk
@@ -151,8 +152,8 @@ class GPT(nn.Module):
         """
         # TODO: Compute the cross-entropy loss
         # Hint: Remember to ignore the padding token index in the loss calculation
-        logits = logits.reshape(-1, logits.size(-1))
-        target_seq = target_seq.reshape(-1)
+        logits = logits.view(-1, logits.size(-1))
+        target_seq = target_seq.contiguous.view(-1)
         loss = nn.CrossEntropyLoss(ignore_index=padding_idx)(logits,target_seq)
         return loss
 
