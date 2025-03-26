@@ -120,7 +120,7 @@ class GPT(nn.Module):
         # Hint: Make sure this works for sequences of different lengths
         # pos_emb = self.positional_embedding[:L].unsqueeze(0)
         pos_emb = self.positional_embedding
-        x = inp_emb + pos_emb
+        x = inp_emb + pos_emb[:L]
 
         # TODO: Define the causal mask for the transformer trunk. 
         # False = masked-out, True = not masked. Shape: [1, L, L]
