@@ -153,7 +153,7 @@ class GPT(nn.Module):
         # TODO: Compute the cross-entropy loss
         # Hint: Remember to ignore the padding token index in the loss calculation
         logits = logits.view(-1, logits.size(-1))
-        target_seq = target_seq.contiguous.view(-1)
+        target_seq = target_seq.contiguous().view(-1)
         loss = nn.CrossEntropyLoss(ignore_index=padding_idx)(logits,target_seq)
         return loss
 
