@@ -98,7 +98,6 @@ class Attention(nn.Module):
         B, L, D = x.shape # Batch size, sequence length, and dimension
 
         # TODO: Compute the keys K, queries Q, and values V from x. Each should be of shape [B num_heads L head_dim].
-        #give B L DIM => B self.num_head,L,_
         q, k, v = self.qkv(x).reshape(B,self.num_heads,L,-1).chunk(3, dim= -1)
 
         # TODO: Compute the attention matrix (pre softmax) and scale it by 1/sqrt(d_k). It should be of shape [B num_heads L L].
@@ -112,7 +111,8 @@ class Attention(nn.Module):
             attn = attn.masked_fill_(mask == False, - float('inf'))
 
         # TODO: Compute the softmax over the last dimension
-        attn = self.softmax(attn)
+        # attn = self.softmax(attn)
+        attn = F.softmax(attn,dim=-1) #debug 
 
         # TODO: Weight the values V by the attention matrix and concatenate the different attention heads
         # Make sure to reshape the output to the original shape of x, i.e. [B L D]
