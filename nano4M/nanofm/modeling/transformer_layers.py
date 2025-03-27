@@ -89,7 +89,14 @@ class Attention(nn.Module):
 
         # TODO: Define here the linear layer(s) producing K, Q, V from the input x
         # Hint: Do you need to define three different projections, or can you use a single one for all three?
-        self.qkv = nn.Linear(dim, dim * 3, qkv_bias)
+
+        # self.qkv = nn.Linear(dim, dim * 3, qkv_bias) COMMENT DEBUG TO REMOVE
+        # DEBUG #
+        self.q = nn.Linear(dim, dim, bias=qkv_bias)
+        self.k = nn.Linear(dim, dim, bias=qkv_bias)
+        self.v = nn.Linear(dim, dim, bias=qkv_bias)
+        #END DEBUG 
+
         self.softmax = nn.Softmax(dim= -1)
         self.attn_out_proj = nn.Linear(dim, dim, bias=proj_bias)
 
@@ -98,7 +105,10 @@ class Attention(nn.Module):
         B, L, D = x.shape # Batch size, sequence length, and dimension
 
         # TODO: Compute the keys K, queries Q, and values V from x. Each should be of shape [B num_heads L head_dim].
-        q, k, v = self.qkv(x).reshape(B,self.num_heads,L,-1).chunk(3, dim= -1)
+        # q, k, v = self.qkv(x).reshape(B,self.num_heads,L,-1).chunk(3, dim=-1) #COMMENT DEBUG TO REMOVE
+        q = self.q(x).reshape(B,L,self.num_heads,-1).permute(0,2,1,3)
+        k = self.k(x).reshape(B,L,self.num_heads,-1).permute(0,2,1,3)
+        v = self.v(x).reshape(B,L,self.num_heads,-1).permute(0,2,1,3)
 
         # TODO: Compute the attention matrix (pre softmax) and scale it by 1/sqrt(d_k). It should be of shape [B num_heads L L].
         # Hint: Use the already defined self.scale
@@ -111,12 +121,11 @@ class Attention(nn.Module):
             attn = attn.masked_fill_(mask == False, - float('inf'))
 
         # TODO: Compute the softmax over the last dimension
-        # attn = self.softmax(attn)
-        attn = F.softmax(attn,dim=-1) #debug 
+        attn = self.softmax(attn)
 
         # TODO: Weight the values V by the attention matrix and concatenate the different attention heads
         # Make sure to reshape the output to the original shape of x, i.e. [B L D]
-        x = torch.matmul(attn,v).reshape(B,L,D)
+        x = (attn @ v).permute(0,2,1,3).reshape(B,L,D)
 
         # Output projection
         x = self.attn_out_proj(x)
