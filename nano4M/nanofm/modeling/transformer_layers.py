@@ -90,13 +90,7 @@ class Attention(nn.Module):
         # TODO: Define here the linear layer(s) producing K, Q, V from the input x
         # Hint: Do you need to define three different projections, or can you use a single one for all three?
 
-        # self.qkv = nn.Linear(dim, dim * 3, qkv_bias) COMMENT DEBUG TO REMOVE
-        # DEBUG #
-        self.q = nn.Linear(dim, dim, bias=qkv_bias)
-        self.k = nn.Linear(dim, dim, bias=qkv_bias)
-        self.v = nn.Linear(dim, dim, bias=qkv_bias)
-        #END DEBUG 
-
+        self.qkv = nn.Linear(dim, dim * 3, qkv_bias) 
         self.softmax = nn.Softmax(dim= -1)
         self.attn_out_proj = nn.Linear(dim, dim, bias=proj_bias)
 
@@ -105,10 +99,8 @@ class Attention(nn.Module):
         B, L, D = x.shape # Batch size, sequence length, and dimension
 
         # TODO: Compute the keys K, queries Q, and values V from x. Each should be of shape [B num_heads L head_dim].
-        # q, k, v = self.qkv(x).reshape(B,self.num_heads,L,-1).chunk(3, dim=-1) #COMMENT DEBUG TO REMOVE
-        q = self.q(x).reshape(B,L,self.num_heads,-1).permute(0,2,1,3)
-        k = self.k(x).reshape(B,L,self.num_heads,-1).permute(0,2,1,3)
-        v = self.v(x).reshape(B,L,self.num_heads,-1).permute(0,2,1,3)
+        q, k, v = self.qkv(x).reshape(B, L, 3, self.num_heads, -1).permute(2, 0, 3, 1, 4)
+        
 
         # TODO: Compute the attention matrix (pre softmax) and scale it by 1/sqrt(d_k). It should be of shape [B num_heads L L].
         # Hint: Use the already defined self.scale
