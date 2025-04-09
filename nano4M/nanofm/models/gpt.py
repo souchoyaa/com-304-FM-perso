@@ -136,10 +136,6 @@ class GPT(nn.Module):
         x = self.to_logits(x)
 
         return x
-    
-
-        # TODO: Return the logits
-        return ???
 
     def compute_ce_loss(self, logits: torch.Tensor, target_seq: torch.LongTensor, padding_idx: int = -100) -> torch.Tensor:
         """
