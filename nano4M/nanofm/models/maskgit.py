@@ -124,10 +124,10 @@ class MaskGIT(nn.Module):
 
         # TODO: Replace embeddings for masked tokens with the learned self.mask_token, wherever mask is True.
         # The mask token (D) is broadcast to all masked positions (B, L)
-        in_emb = torch.masked_fill(in_emb,mask,self.mask_token)
+        in_emb[mask] = self.mask_token
 
         # TODO: Add the positional embeddings to the tokens
-        in_emb += self.positional_embedding(x)
+        in_emb += self.positional_embedding[:L]
 
         # TODO: Forward pass through Transformer trunk
         # Hint: No causal mask is needed here, since we are using full self-attention.
@@ -162,7 +162,7 @@ class MaskGIT(nn.Module):
         # vectorized operations?
         # Hint: Don't forget to create the mask on the same device as seq.
         #[for each b in batch => random select some indexes => Map to True (Create initially from false.)]
-        rand_values = torch.rand_like(seq)
+        rand_values = torch.rand((B,L), device = self.device)
         k = torch.randint(0, L, (B,), device=self.device)
 
         sorted_vals, _ = torch.sort(rand_values, dim=1)
