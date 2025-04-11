@@ -142,34 +142,31 @@ class MaskGIT(nn.Module):
 
     def generate_random_mask(self, seq: torch.Tensor) -> torch.BoolTensor:
         """
-        Generates a random mask for each sample in the batch.
-        Each sample has a random number of tokens (between 1 and L)
-        that are masked (True) and the rest are not masked (False).
+        Génère un masque aléatoire pour chaque échantillon du batch.
+        Chaque échantillon a un nombre aléatoire de tokens (entre 1 et L)
+        qui sont masqués (True) et le reste non masqués (False).
 
         Args:
-            seq: Tensor of shape (B, L) with token IDs.
+            seq: Tensor de forme (B, L) contenant les IDs de tokens.
         Returns:
-            A boolean tensor of shape (B, L) where True indicates a masked token.
+            Un tensor booléen de forme (B, L) où True indique un token masqué.
         """
         B, L = seq.size()
 
-        # TODO: Generate and return a random mask of shape (B, L), where
-        # True = masked-out, False = not masked. Each sample should have a
-        # random number of masked-out tokens between 1 and L. The mask should
-        # be generated such that the number of masked tokens is different
-        # for each sample in the batch.
-        # Note: How can you avoid using a for loop here, and instead use
-        # vectorized operations?
-        # Hint: Don't forget to create the mask on the same device as seq.
-        #[for each b in batch => random select some indexes => Map to True (Create initially from false.)]
-        rand_values = torch.rand((B,L), device = self.device)
-        k = torch.randint(0, L, (B,), device=self.device)
 
-        sorted_vals, _ = torch.sort(rand_values, dim=1)
+        k = torch.randint(low=1, high=L+1, size=(B,), device=self.device) 
+        #We could have used low = 0 high = L but it dose not gives us the same loss curb as the 
+        # one provided. This is due to the use of manual seed while testing.
 
-        thresholds = sorted_vals[torch.arange(B, device=self.device), k]
+        rand_vals = torch.rand((B, L), device=self.device)
 
-        mask = rand_values <= thresholds.unsqueeze(1)
+        sorted_vals, _ = torch.sort(rand_vals, dim=1)
+        
+        thresholds = sorted_vals[torch.arange(B, device=seq.device), k - 1] 
+        
+        # Créer le masque: les tokens dont la valeur aléatoire est inférieure ou égale au seuil sont masqués.
+        mask = rand_vals <= thresholds.unsqueeze(1)
+        
         return mask
         
 
@@ -345,4 +342,4 @@ class MaskGIT(nn.Module):
             return torch.cat(seq_history, dim=0), torch.cat(mask_history, dim=0)
 
         # Return the generated sequence
-        return seq.squeeze() #TODO MODIF HERE IF THERE IS A PROBLEM
+        return seq
