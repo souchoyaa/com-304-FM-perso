@@ -316,7 +316,7 @@ class MaskGIT(nn.Module):
             selected_positions = masked_indices[k_indices]
             
             # TODO: Get the logits for the `selected_positions`. Shape: [k, vocab_size]
-            selected_logits = logits.squeeze()[selected_positions,:]
+            selected_logits = logits[0,selected_positions,:]
             
             # TODO: Sample new tokens for the selected_positions
             # Hint: Use the sample_tokens function from utils/sampling.py
@@ -327,7 +327,7 @@ class MaskGIT(nn.Module):
             # Replace the selected positions in `seq` with the sampled tokens
             # and set the corresponding positions in `mask` to False (indicating that
             # these positions are no longer masked).
-            seq = seq.scatter_(1,selected_positions.unsqueeze(0),samples.unsqueeze(0))
+            seq[0, selected_positions] = samples
             mask[0,selected_positions] = False
 
             if return_history:
