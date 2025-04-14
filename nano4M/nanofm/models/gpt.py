@@ -151,7 +151,7 @@ class GPT(nn.Module):
         # Hint: Remember to ignore the padding token index in the loss calculation
         ???
 
-    def forward(self, data_dict: Dict[str, Any]) -> Dict[str, Any]:
+    def forward(self, data_dict: Dict[str, Any]) -> Tuple[torch.Tensor, Dict[str, Any]]:
         """
         Forward pass through the model.
 
