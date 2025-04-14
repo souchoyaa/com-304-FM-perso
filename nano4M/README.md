@@ -140,5 +140,5 @@ Replace the placeholders as follows:
 
 Example Usage:
 ```bash
-sbatch submit_job_multi_node_scitas.sh nano4M_sol/cfgs/nano4M/multiclevr_d6-6w512.yaml abcdef1234567890
+sbatch submit_job_multi_node_scitas.sh nano4M/cfgs/nano4M/multiclevr_d6-6w512.yaml abcdef1234567890
 ```
