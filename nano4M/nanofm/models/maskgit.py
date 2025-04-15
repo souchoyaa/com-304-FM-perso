@@ -185,7 +185,7 @@ class MaskGIT(nn.Module):
         # Hint: Remember to ignore the ignore_index in the loss calculation
         return F.cross_entropy(logits.reshape(-1, logits.size(-1)), target_seq.reshape(-1), ignore_index=ignore_index)
 
-    def forward(self, data_dict: Dict[str, Any]) -> Dict[str, Any]:
+    def forward(self, data_dict: Dict[str, Any]) -> Tuple[torch.Tensor, Dict[str, Any]]:
         """
         Forward pass for training.
         Randomly selects a number of tokens (between 1 and L) to mask per sample,
