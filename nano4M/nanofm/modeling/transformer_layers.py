@@ -144,7 +144,7 @@ class CrossAttention(nn.Module):
 
         # TODO: Define here the linear layers producing K, V from the context
         # Hint: Do you need to define two different projections, or can you use a single one for both?
-        self.q = nn.Linear(dim, dim * 2, qkv_bias) 
+        self.kv = nn.Linear(dim, dim * 2, qkv_bias) 
 
         self.attn_out_proj = nn.Linear(dim, dim, bias=proj_bias)
 
@@ -156,7 +156,7 @@ class CrossAttention(nn.Module):
         q = self.q(x).reshape(B, N, self.num_heads,-1).permute(0,2,1,3)
 
         # TODO: Compute the keys K and values V from the context. Each should be of shape [B num_heads M head_dim].
-        k, v = self.qkv(x).reshape(B, M, 2, self.num_heads, -1).permute(2, 0, 3, 1, 4)
+        k, v = self.kv(context).reshape(B, M, 2, self.num_heads, -1).permute(2, 0, 3, 1, 4)
 
         # TODO: Compute the attention matrix (pre softmax) and scale it by 1/sqrt(d_k). It should be of shape [B num_heads N M].
         # Hint: Use the already defined self.scale
@@ -166,7 +166,7 @@ class CrossAttention(nn.Module):
             mask = rearrange(mask, "b n m -> b 1 n m") # Unsqueeze for multi-head attention
             # TODO: Apply the optional attention mask. Wherever the mask is False, replace the attention 
             # matrix value by negative infinity → zero attention weight after softmax.
-            attn = torch.masked_fill(attn,mask,-torch.inf)
+            attn = attn.masked_fill_(mask == False, - float('inf'))
 
         # TODO: Compute the softmax over the last dimension
         attn = F.softmax(attn,dim = -1)

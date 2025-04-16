@@ -447,11 +447,11 @@ class FourM(nn.Module):
         # That means, we will randomly shuffle the positions from 0 to n_tokens_target - 1, and then
         # split them into `num_steps` steps. 
         
-        idx_shuffle = torch.randperm(n_tokens_target,device = self.device).reshape(num_steps,-1)
+        idx_shuffle = torch.randperm(n_tokens_target,device = self.device).split(schedule)
 
         # dec_input_positions_list is a list of position indices of shape (1, k) for each step. 
         # Together, they should contain all the positions from 0 to n_tokens_target - 1 exactly once.
-        dec_input_positions_list = list(idx_shuffle.split(1,dim=0))
+        dec_input_positions_list = [e.unsqueeze(0) for e in idx_shuffle]
         
         for step, k in enumerate(schedule):
             # Select the k positions to predict for this step
@@ -462,7 +462,7 @@ class FourM(nn.Module):
             # TODO: Forward pass through the model to get the next tokens' logits. 
             # Select the 0-th element to get shape: [k, vocab_size]
             predicted_logits = self.forward_model(
-                                enc_input_tokens= enc_input_tokens
+                                enc_input_tokens= enc_input_tokens,
                                 enc_input_modalities=enc_input_modalities,
                                 enc_input_positions=enc_input_positions,
                                 dec_input_modalities=dec_input_modalities,
