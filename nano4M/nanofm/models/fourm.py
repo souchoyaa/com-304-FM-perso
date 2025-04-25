@@ -481,9 +481,10 @@ class FourM(nn.Module):
             # Specifically, concatenate the k samples to enc_input_tokens, the k dec_input_positions
             # to enc_input_positions, and the k dec_input_modalities to enc_input_modalities.
             # The resulting shapes for each tensor should be [1, N_prev + k].
-            enc_input_tokens = torch.cat(enc_input_tokens,samples)
-            enc_input_positions = torch.cat(enc_input_positions,dec_input_positions)
-            enc_input_modalities = torch.cat(enc_input_modalities,dec_input_modalities)
+            enc_input_tokens = torch.cat([enc_input_tokens, samples.unsqueeze(0)], dim=1)
+            enc_input_positions = torch.cat([enc_input_positions, dec_input_positions], dim=1)
+            enc_input_modalities = torch.cat([enc_input_modalities, dec_input_modalities], dim=1)
+
                    
         # Select the predicted tokens for the target modality and unshuffle them
         pred_tokens = enc_input_tokens[enc_input_modalities == target_mod_index]
